@@ -1,38 +1,15 @@
-# Directorio de movilidad Uniandes — prototipo
+# Directorio de movilidad – Uniandes (prototipo v3)
 
-Página estática, adaptable a celular, para orientar consultas de movilidad hacia correo y chat directo de Teams.
+Sube **los tres archivos** `index.html`, `styles.css` y `script.js` al mismo nivel en tu repositorio GitHub Pages. La página incorpora rutas con `?v=3` para eludir versiones anteriores en caché.
 
-## Abrir localmente
+## Qué hace
+- Selecciona tema y tipo de consulta, o muestra errores en rojo cuando falta información.
+- Muestra el contacto y ofrece abrir Teams o redactar en Outlook Web, con texto en borrador.
+- Muestra previsualización del mensaje con botón para copiarlo manualmente si el servicio no respeta la precarga.
 
-Abre `index.html` en Chrome o Edge. No requiere instalar dependencias ni compiladores.
-
-## Publicar en GitHub Pages
-
-1. Crea un repositorio en GitHub (por ejemplo, `contactos-movilidad`).
-2. Sube `index.html`, `styles.css` y `script.js` a la raíz de la rama `main`.
-3. En el repositorio, ve a **Settings → Pages**.
-4. En **Build and deployment**, selecciona **Deploy from a branch**, `main` y `/ (root)`; guarda.
-5. GitHub mostrará la URL de publicación, normalmente `https://TU-USUARIO.github.io/contactos-movilidad/`.
-
-## Antes de compartirlo como directorio oficial
-
-- Validar autorización institucional, especialmente para publicación bajo una cuenta de GitHub ajena a Uniandes.
-- Confirmar con el equipo las funciones, responsables y correos definitivos.
-- Validar que cada cuenta indicada en `PEOPLE` corresponda efectivamente al usuario principal de Microsoft Teams; algunas direcciones pueden ser buzones compartidos o alias y no abrir chats.
-- Comprobar qué públicos pueden escribir por Teams y si requieren cuenta institucional.
-- Confirmar que `oiamobilityinfo@uniandes.edu.co` sirva para orientación general y que el acceso a jefatura sea público.
-- Solicitar y usar el logo oficial aprobado si se decide mostrarlo. La letra U es un marcador gráfico temporal, no un logo institucional.
-
-## Mantener los datos
-
-Edita `PEOPLE` y `TOPICS` en `script.js`. Los enlaces a Teams se generan con el formato oficial de Microsoft:
-`https://teams.microsoft.com/l/chat/0/0?users=usuario@uniandes.edu.co`
-
-Esta página no almacena datos personales ni envía mensajes: solo abre los canales existentes.
-
-## Validación y mensajes predeterminados
-- No se selecciona ningún tema al entrar. Si se pulsa **Encontrar contacto** sin elegir tema, aparece un aviso rojo.
-- El tipo de consulta también es obligatorio. Al elegir otro tema, se reinicia el campo y el resultado.
-- Los enlaces de Teams incluyen el parámetro `message` para dejar un borrador de mensaje, y los enlaces de correo incluyen `subject` y `body`.
-- **No se envía ningún mensaje automáticamente.** El visitante debe revisar y pulsar Enviar.
-- Si el enlace de Teams no resuelve al destinatario, validar su UPN en Microsoft Entra, especialmente para buzones compartidos.
+## Importante
+- Los enlaces no envían mensajes automáticamente.
+- Teams necesita un UPN real de Microsoft Entra; un alias de correo no siempre identifica a una persona. Validar cada usuario con TI.
+- Outlook Web requiere sesión iniciada.
+- La distribución de responsabilidades y canales debe aprobarla el equipo antes de publicar.
+- Si el sitio existente sigue mostrando la versión anterior, revisa que **los tres archivos** hayan sido reemplazados en la rama utilizada por Pages; después recarga con Ctrl+Shift+R.

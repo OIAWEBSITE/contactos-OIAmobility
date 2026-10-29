@@ -10,3 +10,13 @@ select:disabled{background:#f0f1f2;color:#7a7f85;cursor:not-allowed}
 .find-button{background:#17283b;color:#fff;border:0;border-radius:9px;font-weight:750;padding:14px 18px;margin-top:18px;width:100%;cursor:pointer}
 .find-button:hover,.find-button:focus-visible{background:#314967}
 .empty-icon{display:grid;place-items:center;width:57px;height:57px;border-radius:16px;background:#e8edf1;font-size:29px;color:#314967;margin-bottom:8px}
+
+/* Mejoras v3 */
+.find-button{display:flex!important;align-items:center;justify-content:center;gap:14px;appearance:none;background:#17283b!important;color:#fff!important;border:2px solid #17283b!important;border-radius:12px!important;box-shadow:0 5px 16px rgba(23,40,59,.12);min-height:52px;font-size:15px!important;font-family:inherit;font-weight:800;line-height:1.4;cursor:pointer}
+.find-button:hover{background:#2e4864!important;color:white!important}
+.message-preview{border:1px solid #dce3e7;border-radius:12px;padding:15px;background:#fff;margin-top:18px}
+.message-preview>strong{font-size:13px;color:#17283b}
+.message-text{font-family:inherit;font-size:12px;color:#3d4b58;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7f8;padding:12px;border-radius:8px}
+.copy-message{border:1px solid #cad3da;padding:10px 14px;border-radius:8px;background:white;color:#17283b;font-weight:700;cursor:pointer}
+.copy-message:hover{background:#eef2f5}
+.person-actions .action{min-height:40px}.person{flex-wrap:wrap}.process-mail{display:flex;flex-direction:column;gap:9px;align-items:flex-start}.process-mail .action{white-space:normal;text-align:left}.field-error[hidden]{display:none!important}
