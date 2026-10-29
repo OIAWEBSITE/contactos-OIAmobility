@@ -29,3 +29,10 @@ Edita `PEOPLE` y `TOPICS` en `script.js`. Los enlaces a Teams se generan con el 
 `https://teams.microsoft.com/l/chat/0/0?users=usuario@uniandes.edu.co`
 
 Esta página no almacena datos personales ni envía mensajes: solo abre los canales existentes.
+
+## Validación y mensajes predeterminados
+- No se selecciona ningún tema al entrar. Si se pulsa **Encontrar contacto** sin elegir tema, aparece un aviso rojo.
+- El tipo de consulta también es obligatorio. Al elegir otro tema, se reinicia el campo y el resultado.
+- Los enlaces de Teams incluyen el parámetro `message` para dejar un borrador de mensaje, y los enlaces de correo incluyen `subject` y `body`.
+- **No se envía ningún mensaje automáticamente.** El visitante debe revisar y pulsar Enviar.
+- Si el enlace de Teams no resuelve al destinatario, validar su UPN en Microsoft Entra, especialmente para buzones compartidos.

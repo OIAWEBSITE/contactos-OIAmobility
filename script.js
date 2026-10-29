@@ -35,28 +35,65 @@ const TOPICS = [
 const listEl=document.getElementById('topic-list');
 const selectEl=document.getElementById('subtopic');
 const resultEl=document.getElementById('result-content');
-let active=TOPICS[0];
-const teamsLink=(user)=>`https://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(user)}`;
+const errorTopic=document.getElementById('topic-error');
+const errorSubtopic=document.getElementById('subtopic-error');
+const findButton=document.getElementById('find-contact');
+let active=null;
 function element(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el}
 function link(label,href,css){const a=element('a','action '+css,label);a.href=href;if(href.startsWith('https')){a.target='_blank';a.rel='noopener noreferrer'}return a}
+function buildMessage(item){
+  return `Buen día,\n\nMi nombre es [tu nombre] y quisiera recibir orientación sobre ${item.label.toLowerCase()}.\n\nMi consulta es: [describe brevemente tu pregunta].\n\nMuchas gracias por su ayuda.`;
+}
+function emailLink(email,item){return `mailto:${email}?subject=${encodeURIComponent('Consulta de movilidad académica - '+item.label)}&body=${encodeURIComponent(buildMessage(item))}`}
+function teamsLink(user,item){return `https://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(user)}&message=${encodeURIComponent(buildMessage(item))}`}
+function showError(el,show){el.hidden=!show}
+function showEmpty(){
+  resultEl.replaceChildren();
+  resultEl.append(element('div','empty-icon','✉'));
+  resultEl.append(element('h3','result-title','Tu contacto aparecerá aquí'));
+  resultEl.append(element('p','result-desc','Selecciona un tema, especifica tu consulta y haz clic en «Encontrar contacto».'));
+}
 function render(){
-  const item=active.items[Number(selectEl.value)]||active.items[0];
+  if(!active || selectEl.value===''){showEmpty();return}
+  const item=active.items[Number(selectEl.value)];
   resultEl.replaceChildren();
   resultEl.append(element('span','result-heading','Te recomendamos contactar a:'));
   resultEl.append(element('h3','result-title',item.people.length?item.people.map(k=>PEOPLE[k].name).join(' o '):'Equipo de '+active.label.toLowerCase()));
   resultEl.append(element('p','result-desc',item.desc));
   item.people.forEach(key=>{
-    const p=PEOPLE[key],card=element('div','person'),info=element('div'),actions=element('div','person-actions');
-    info.append(element('h4','',p.name),element('p','',p.user));
-    actions.append(link('Abrir Teams ↗',teamsLink(p.user),'action-primary'),link('Correo ↗','mailto:'+p.user,'action-secondary'));
+    const person=PEOPLE[key],card=element('div','person'),info=element('div'),actions=element('div','person-actions');
+    info.append(element('h4','',person.name),element('p','',person.user));
+    actions.append(link('Abrir Teams ↗',teamsLink(person.user,item),'action-primary'),link('Correo ↗',emailLink(person.user,item),'action-secondary'));
     card.append(info,actions);resultEl.append(card);
   });
-  const mail=element('div','process-mail');mail.append('Correo general del proceso: ');const a=element('a','',active.email);a.href='mailto:'+active.email;mail.append(a);resultEl.append(mail);
-  resultEl.append(element('p','fallback','Importante: abrir Teams puede requerir iniciar sesión y disponer de permisos para escribir al destinatario.'));
+  const mail=element('div','process-mail');mail.append('Correo general del proceso: ');
+  const a=element('a','',active.email+' ↗');a.href=emailLink(active.email,item);mail.append(a);resultEl.append(mail);
+  resultEl.append(element('p','fallback','Los botones preparan un mensaje que puedes editar antes de enviarlo. Teams puede requerir iniciar sesión y contar con permisos para escribir al destinatario.'));
 }
-function activate(topicId){active=TOPICS.find(t=>t.id===topicId)||TOPICS[0];
-  [...listEl.children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===active.id)));
-  selectEl.replaceChildren();active.items.forEach((x,i)=>{const opt=document.createElement('option');opt.value=String(i);opt.textContent=x.label;selectEl.append(opt)});render();
+function activate(topicId){
+  active=TOPICS.find(t=>t.id===topicId)||null;
+  [...listEl.children].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===topicId)));
+  listEl.classList.remove('has-error');showError(errorTopic,false);
+  selectEl.replaceChildren();
+  let opt=document.createElement('option');opt.value='';opt.textContent='Selecciona el tipo de consulta';selectEl.append(opt);
+  if(active)active.items.forEach((x,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=x.label;selectEl.append(option)});
+  selectEl.disabled=!active;
+  selectEl.classList.remove('has-error');showError(errorSubtopic,false);
+  showEmpty();
 }
-TOPICS.forEach(t=>{const b=element('button','topic');b.type='button';b.dataset.id=t.id;b.append(element('strong','',t.label),element('small','',t.subtitle));b.addEventListener('click',()=>activate(t.id));listEl.append(b)});
-selectEl.addEventListener('change',render);activate('saliente');
+TOPICS.forEach(t=>{
+  const b=element('button','topic');b.type='button';b.dataset.id=t.id;b.setAttribute('aria-pressed','false');
+  b.append(element('strong','',t.label),element('small','',t.subtitle));
+  b.addEventListener('click',()=>activate(t.id));listEl.append(b)
+});
+selectEl.addEventListener('change',()=>{
+  if(selectEl.value!==''){selectEl.classList.remove('has-error');showError(errorSubtopic,false)}
+  showEmpty();
+});
+findButton.addEventListener('click',()=>{
+  if(!active){listEl.classList.add('has-error');showError(errorTopic,true);listEl.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(selectEl.value===''){selectEl.classList.add('has-error');showError(errorSubtopic,true);selectEl.focus();return}
+  showError(errorTopic,false);showError(errorSubtopic,false);render();
+  if(window.matchMedia('(max-width:820px)').matches)document.getElementById('resultado').scrollIntoView({behavior:'smooth',block:'start'});
+});
+activate(null);
